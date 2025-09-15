@@ -16,10 +16,12 @@ interface AuthState {
   loadProfile: () => Promise<void>;
   clearError: () => void;
   initialize: () => Promise<void>;
+  getUserProfile: () => Promise<User | null>;
 
   // Helper functions
   hasRole: (role: string) => boolean;
   hasPermission: (permission: string) => boolean;
+  checkSession: () => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -111,6 +113,14 @@ export const useAuthStore = create<AuthState>()(
       },
 
       loadProfile: async () => {
+        // Prevent multiple simultaneous profile loads
+        const state = get();
+        if (state.isLoading) {
+          return; // Already loading, skip
+        }
+
+        set({ isLoading: true });
+
         try {
           const response = await apiClient.getProfile();
 
@@ -118,18 +128,21 @@ export const useAuthStore = create<AuthState>()(
             set({
               user: response.data.user,
               isAuthenticated: true,
+              isLoading: false,
             });
           } else {
             // Profile load failed, user might be logged out
             set({
               user: null,
               isAuthenticated: false,
+              isLoading: false,
             });
           }
         } catch (error) {
           set({
             user: null,
             isAuthenticated: false,
+            isLoading: false,
           });
         }
       },
@@ -137,8 +150,24 @@ export const useAuthStore = create<AuthState>()(
       clearError: () => set({ error: null }),
 
       initialize: async () => {
-        // Try to load user profile to check if session is valid
-        await get().loadProfile();
+        // Only load profile if we think we're authenticated but don't have user data
+        // This reduces unnecessary API calls on app startup
+        const state = get();
+        if (state.isAuthenticated && !state.user) {
+          await state.loadProfile();
+        }
+      },
+
+      // Lazy profile loading - only load when data is actually needed
+      getUserProfile: async () => {
+        const state = get();
+        if (state.user) {
+          return state.user; // Return cached user data
+        }
+
+        // Load profile if not cached
+        await state.loadProfile();
+        return get().user;
       },
 
       hasRole: (role: string) => {
@@ -149,6 +178,36 @@ export const useAuthStore = create<AuthState>()(
       hasPermission: (permission: string) => {
         const user = get().user;
         return user?.permissions.includes(permission) || false;
+      },
+
+      checkSession: async () => {
+        // Quick session check without full profile load
+        const state = get();
+        if (!state.isAuthenticated || !state.user) {
+          return false;
+        }
+
+        try {
+          // Make a lightweight request to check session validity
+          const response = await fetch(`${apiClient.getBaseURL()}/api/v1/auth/profile`, {
+            method: 'HEAD', // HEAD request is lighter than GET
+            credentials: 'include',
+          });
+
+          if (response.ok) {
+            return true;
+          } else if (response.status === 401) {
+            // Session expired, clear auth state
+            get().signout();
+            return false;
+          }
+        } catch (error) {
+          console.warn('Session check failed:', error);
+          // If we can't check, assume session is still valid
+          return true;
+        }
+
+        return false;
       },
     }),
     {

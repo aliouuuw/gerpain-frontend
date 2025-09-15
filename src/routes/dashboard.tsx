@@ -6,29 +6,8 @@ export const Route = createFileRoute('/dashboard')({
   beforeLoad: async ({ location }) => {
     const authStore = useAuthStore.getState()
 
-    // If not authenticated, redirect to login
-    if (!authStore.isAuthenticated) {
-      throw redirect({
-        to: '/login',
-        search: {
-          redirect: location.pathname,
-        },
-      })
-    }
-
-    // Try to refresh user profile to ensure session is still valid
-    try {
-      await authStore.loadProfile()
-      const updatedAuthStore = useAuthStore.getState()
-      if (!updatedAuthStore.isAuthenticated) {
-        throw redirect({
-          to: '/login',
-          search: {
-            redirect: location.pathname,
-          },
-        })
-      }
-    } catch (error) {
+    // Simple client-side check - session validation happens automatically via cookies
+    if (!authStore.isAuthenticated || !authStore.user) {
       throw redirect({
         to: '/login',
         search: {

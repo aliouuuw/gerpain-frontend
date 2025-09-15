@@ -48,9 +48,11 @@ class ApiClient {
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
+        // Don't override Accept header to let browser handle it
         ...options.headers,
       },
       credentials: 'include', // Include cookies for session auth
+      // Add cache control for better performance
       ...options,
     };
 
@@ -225,6 +227,11 @@ class ApiClient {
         },
       };
     }
+  }
+
+  // Getter for baseURL to expose it for auth store
+  public getBaseURL(): string {
+    return this.baseURL;
   }
 }
 

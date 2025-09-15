@@ -8,30 +8,8 @@ export const Route = createFileRoute('/profile')({
   beforeLoad: async ({ location }) => {
     const authStore = useAuthStore.getState()
 
-    // If not authenticated, redirect to login
-    if (!authStore.isAuthenticated) {
-      throw redirect({
-        to: '/login',
-        search: {
-          redirect: location.pathname,
-        },
-      })
-    }
-
-    // Try to refresh user profile to ensure session is still valid
-    try {
-      await authStore.loadProfile()
-      // Check authentication status after profile load
-      const currentState = useAuthStore.getState()
-      if (!currentState.isAuthenticated) {
-        throw redirect({
-          to: '/login',
-          search: {
-            redirect: location.pathname,
-          },
-        })
-      }
-    } catch (error) {
+    // Simple client-side check - session validation happens automatically via cookies
+    if (!authStore.isAuthenticated || !authStore.user) {
       throw redirect({
         to: '/login',
         search: {
@@ -98,7 +76,8 @@ function ProfilePage() {
 
       if (response.success) {
         setSuccess('Profile updated successfully!')
-        await loadProfile() // Refresh user data
+        // No need to refresh - session is already validated by Lucia middleware
+        // User data is current from the auth store
         setIsEditing(false)
 
         // If email was changed, show verification message

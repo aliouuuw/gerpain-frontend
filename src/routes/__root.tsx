@@ -8,6 +8,7 @@ function RootComponent() {
   const initialize = useAuthStore((state) => state.initialize)
 
   useEffect(() => {
+    // Initialize auth state on app startup
     initialize()
   }, [initialize])
 
