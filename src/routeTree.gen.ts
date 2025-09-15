@@ -15,8 +15,14 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ForbiddenRouteImport } from './routes/forbidden'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as adminAdminUsersRouteImport } from './routes/(admin)/admin.users'
+import { Route as adminAdminOrganizationsRouteImport } from './routes/(admin)/admin.organizations'
+import { Route as adminAdminInvitationsRouteImport } from './routes/(admin)/admin.invitations'
+import { Route as adminAdminHomeRouteImport } from './routes/(admin)/admin.home'
+import { Route as adminAdminDashboardRouteImport } from './routes/(admin)/admin.dashboard'
 
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -48,6 +54,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForbiddenRoute = ForbiddenRouteImport.update({
+  id: '/forbidden',
+  path: '/forbidden',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -58,80 +69,147 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const adminAdminUsersRoute = adminAdminUsersRouteImport.update({
+  id: '/(admin)/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const adminAdminOrganizationsRoute = adminAdminOrganizationsRouteImport.update({
+  id: '/(admin)/admin/organizations',
+  path: '/admin/organizations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const adminAdminInvitationsRoute = adminAdminInvitationsRouteImport.update({
+  id: '/(admin)/admin/invitations',
+  path: '/admin/invitations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const adminAdminHomeRoute = adminAdminHomeRouteImport.update({
+  id: '/(admin)/admin/home',
+  path: '/admin/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const adminAdminDashboardRoute = adminAdminDashboardRouteImport.update({
+  id: '/(admin)/admin/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/forbidden': typeof ForbiddenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/dashboard': typeof adminAdminDashboardRoute
+  '/admin/home': typeof adminAdminHomeRoute
+  '/admin/invitations': typeof adminAdminInvitationsRoute
+  '/admin/organizations': typeof adminAdminOrganizationsRoute
+  '/admin/users': typeof adminAdminUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/forbidden': typeof ForbiddenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/dashboard': typeof adminAdminDashboardRoute
+  '/admin/home': typeof adminAdminHomeRoute
+  '/admin/invitations': typeof adminAdminInvitationsRoute
+  '/admin/organizations': typeof adminAdminOrganizationsRoute
+  '/admin/users': typeof adminAdminUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/forbidden': typeof ForbiddenRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/(admin)/admin/dashboard': typeof adminAdminDashboardRoute
+  '/(admin)/admin/home': typeof adminAdminHomeRoute
+  '/(admin)/admin/invitations': typeof adminAdminInvitationsRoute
+  '/(admin)/admin/organizations': typeof adminAdminOrganizationsRoute
+  '/(admin)/admin/users': typeof adminAdminUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/forbidden'
     | '/forgot-password'
     | '/login'
     | '/profile'
     | '/reset-password'
     | '/signup'
     | '/verify-email'
+    | '/admin/dashboard'
+    | '/admin/home'
+    | '/admin/invitations'
+    | '/admin/organizations'
+    | '/admin/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
+    | '/forbidden'
     | '/forgot-password'
     | '/login'
     | '/profile'
     | '/reset-password'
     | '/signup'
     | '/verify-email'
+    | '/admin/dashboard'
+    | '/admin/home'
+    | '/admin/invitations'
+    | '/admin/organizations'
+    | '/admin/users'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/forbidden'
     | '/forgot-password'
     | '/login'
     | '/profile'
     | '/reset-password'
     | '/signup'
     | '/verify-email'
+    | '/(admin)/admin/dashboard'
+    | '/(admin)/admin/home'
+    | '/(admin)/admin/invitations'
+    | '/(admin)/admin/organizations'
+    | '/(admin)/admin/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  ForbiddenRoute: typeof ForbiddenRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  adminAdminDashboardRoute: typeof adminAdminDashboardRoute
+  adminAdminHomeRoute: typeof adminAdminHomeRoute
+  adminAdminInvitationsRoute: typeof adminAdminInvitationsRoute
+  adminAdminOrganizationsRoute: typeof adminAdminOrganizationsRoute
+  adminAdminUsersRoute: typeof adminAdminUsersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forbidden': {
+      id: '/forbidden'
+      path: '/forbidden'
+      fullPath: '/forbidden'
+      preLoaderRoute: typeof ForbiddenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -192,18 +277,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(admin)/admin/users': {
+      id: '/(admin)/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof adminAdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(admin)/admin/organizations': {
+      id: '/(admin)/admin/organizations'
+      path: '/admin/organizations'
+      fullPath: '/admin/organizations'
+      preLoaderRoute: typeof adminAdminOrganizationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(admin)/admin/invitations': {
+      id: '/(admin)/admin/invitations'
+      path: '/admin/invitations'
+      fullPath: '/admin/invitations'
+      preLoaderRoute: typeof adminAdminInvitationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(admin)/admin/home': {
+      id: '/(admin)/admin/home'
+      path: '/admin/home'
+      fullPath: '/admin/home'
+      preLoaderRoute: typeof adminAdminHomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(admin)/admin/dashboard': {
+      id: '/(admin)/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof adminAdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  ForbiddenRoute: ForbiddenRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  adminAdminDashboardRoute: adminAdminDashboardRoute,
+  adminAdminHomeRoute: adminAdminHomeRoute,
+  adminAdminInvitationsRoute: adminAdminInvitationsRoute,
+  adminAdminOrganizationsRoute: adminAdminOrganizationsRoute,
+  adminAdminUsersRoute: adminAdminUsersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
