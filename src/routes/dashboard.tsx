@@ -41,7 +41,6 @@ export const Route = createFileRoute('/dashboard')({
 })
 
 function DashboardPage() {
-  const { user } = useAuthStore()
 
   return (
     <div className="min-h-screen bg-gray-50">
