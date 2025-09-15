@@ -58,7 +58,7 @@ function ForgotPasswordPage() {
               </a>
               <button
                 onClick={() => setSuccess(false)}
-                className="w-full text-sm text-gray-600 hover:text-gray-900 font-light"
+                className="w-full text-sm text-gray-600 hover:text-gray-900 font-light cursor-pointer"
               >
                 Didn't receive the email? Try again
               </button>

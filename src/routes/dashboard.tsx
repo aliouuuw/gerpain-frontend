@@ -1,12 +1,13 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useAuthStore } from '../stores/authStore'
 import Header from '../components/Header'
+import AuthGuard from '../components/AuthGuard'
 
 export const Route = createFileRoute('/dashboard')({
-  beforeLoad: async ({ location }) => {
+  beforeLoad: ({ location }) => {
     const authStore = useAuthStore.getState()
 
-    // Simple client-side check - session validation happens automatically via cookies
+    // Check if we have basic auth state
     if (!authStore.isAuthenticated || !authStore.user) {
       throw redirect({
         to: '/login',
@@ -15,6 +16,10 @@ export const Route = createFileRoute('/dashboard')({
         },
       })
     }
+
+    // Perform non-blocking session validation in the background
+    // This will check session validity every 5 minutes, but won't block navigation
+    authStore.validateSessionIfNeeded()
   },
   component: DashboardPage,
 })
@@ -22,12 +27,13 @@ export const Route = createFileRoute('/dashboard')({
 function DashboardPage() {
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <Header />
+    <AuthGuard>
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <Header />
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
           <div className="bg-gray-50 border border-gray-100 rounded-lg p-6">
@@ -163,5 +169,6 @@ function DashboardPage() {
         </div>
       </main>
     </div>
+    </AuthGuard>
   )
 }

@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import { useAuthStore } from '../stores/authStore'
 import { apiClient } from '../services/api'
 import Header from '../components/Header'
+import AuthGuard from '../components/AuthGuard'
 
 export const Route = createFileRoute('/profile')({
   beforeLoad: ({ location }) => {
     const authStore = useAuthStore.getState()
 
-    // Simple client-side check - session validation happens automatically via cookies
+    // Check if we have basic auth state
     if (!authStore.isAuthenticated || !authStore.user) {
       throw redirect({
         to: '/login',
@@ -17,12 +18,17 @@ export const Route = createFileRoute('/profile')({
         },
       })
     }
+
+    // Perform non-blocking session validation in the background
+    // This will check session validity every 5 minutes, but won't block navigation
+    authStore.validateSessionIfNeeded()
   },
   component: ProfilePage,
 })
 
 function ProfilePage() {
   const { user } = useAuthStore()
+  const roles: Array<string> = Array.isArray((user as any)?.roles) ? ((user as any).roles as Array<string>) : []
   const [isEditing, setIsEditing] = useState(false)
   const [isChangingPassword, setIsChangingPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -152,8 +158,9 @@ function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <AuthGuard>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
       <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="bg-white shadow-lg rounded-lg">
           {/* Header */}
@@ -186,7 +193,7 @@ function ProfilePage() {
                       setIsEditing(true)
                       clearMessages()
                     }}
-                    className="text-sm text-black hover:text-gray-600 font-medium"
+                    className="text-sm text-black hover:text-gray-600 font-medium cursor-pointer"
                   >
                     Edit Profile
                   </button>
@@ -230,7 +237,7 @@ function ProfilePage() {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                      className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
                     >
                       {isLoading ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -244,7 +251,7 @@ function ProfilePage() {
                         })
                         clearMessages()
                       }}
-                      className="text-gray-600 hover:text-gray-900 px-4 py-2 font-medium"
+                      className="text-gray-600 hover:text-gray-900 px-4 py-2 font-medium cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -287,7 +294,7 @@ function ProfilePage() {
                       setIsChangingPassword(true)
                       clearMessages()
                     }}
-                    className="text-sm text-black hover:text-gray-600 font-medium"
+                    className="text-sm text-black hover:text-gray-600 font-medium cursor-pointer"
                   >
                     Change Password
                   </button>
@@ -345,7 +352,7 @@ function ProfilePage() {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                      className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium cursor-pointer"
                     >
                       {isLoading ? 'Changing...' : 'Change Password'}
                     </button>
@@ -360,7 +367,7 @@ function ProfilePage() {
                         })
                         clearMessages()
                       }}
-                      className="text-gray-600 hover:text-gray-900 px-4 py-2 font-medium"
+                      className="text-gray-600 hover:text-gray-900 px-4 py-2 font-medium cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -384,8 +391,8 @@ function ProfilePage() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Roles</label>
                   <div className="flex flex-wrap gap-1">
-                    {user.roles.length > 0 ? (
-                      user.roles.map(role => (
+                    {roles.length > 0 ? (
+                      roles.map(role => (
                         <span key={role} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           {role}
                         </span>
@@ -413,5 +420,6 @@ function ProfilePage() {
         </div>
       </div>
     </div>
+    </AuthGuard>
   )
 }

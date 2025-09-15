@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useAuthStore } from '../stores/authStore'
+import AuthRedirect from '../components/AuthRedirect'
 
 export const Route = createFileRoute('/signup')({
   component: SignupPage,
@@ -52,7 +53,8 @@ function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <AuthRedirect redirectTo="/dashboard">
+      <div className="min-h-screen flex">
       {/* Left Column - Black Background */}
       <div className="hidden lg:flex lg:flex-1 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
@@ -179,6 +181,7 @@ function SignupPage() {
         </div>
       </div>
     </div>
+    </AuthRedirect>
   )
 }
 
