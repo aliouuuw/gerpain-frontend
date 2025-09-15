@@ -5,7 +5,7 @@ import { apiClient } from '../services/api'
 import Header from '../components/Header'
 
 export const Route = createFileRoute('/profile')({
-  beforeLoad: async ({ location }) => {
+  beforeLoad: ({ location }) => {
     const authStore = useAuthStore.getState()
 
     // Simple client-side check - session validation happens automatically via cookies
@@ -22,7 +22,7 @@ export const Route = createFileRoute('/profile')({
 })
 
 function ProfilePage() {
-  const { user, loadProfile } = useAuthStore()
+  const { user } = useAuthStore()
   const [isEditing, setIsEditing] = useState(false)
   const [isChangingPassword, setIsChangingPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
