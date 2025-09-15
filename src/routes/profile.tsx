@@ -21,7 +21,9 @@ export const Route = createFileRoute('/profile')({
     // Try to refresh user profile to ensure session is still valid
     try {
       await authStore.loadProfile()
-      if (!authStore.isAuthenticated) {
+      // Check authentication status after profile load
+      const currentState = useAuthStore.getState()
+      if (!currentState.isAuthenticated) {
         throw redirect({
           to: '/login',
           search: {

@@ -18,7 +18,7 @@ export const Route = createFileRoute('/verify-email')({
 function VerifyEmailPage() {
   const navigate = useNavigate()
   const searchParams = useSearch({ from: Route.id })
-  const { token, email } = searchParams
+  const { token } = searchParams
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
