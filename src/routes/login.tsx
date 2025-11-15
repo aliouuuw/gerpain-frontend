@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuthStore } from '../stores/authStore'
-import AuthRedirect from '../components/AuthRedirect'
 
 export const Route = createFileRoute('/login')({
   validateSearch: (search: Record<string, unknown>) => {
@@ -13,8 +12,14 @@ export const Route = createFileRoute('/login')({
 
 function LoginPage() {
   const navigate = useNavigate()
-  const { signin, isLoading, error, clearError } = useAuthStore()
+  const { signin, isLoading, error, clearError, isAuthenticated, user } = useAuthStore()
   const { redirect } = Route.useSearch()
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      navigate({ to: redirect, replace: true })
+    }
+  }, [isAuthenticated, user, redirect, navigate])
 
   const [formData, setFormData] = useState({
     email: '',
@@ -27,8 +32,8 @@ function LoginPage() {
 
     const success = await signin(formData.email, formData.password)
 
-    if (success) {
-      navigate({ to: redirect })
+    if (!success) {
+      return
     }
   }
 
@@ -41,8 +46,7 @@ function LoginPage() {
   }
 
   return (
-    <AuthRedirect redirectTo="/dashboard">
-      <div className="min-h-screen flex">
+    <div className="min-h-screen flex">
       {/* Left Column - Black Background */}
       <div className="hidden lg:flex lg:flex-1 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
@@ -176,6 +180,5 @@ function LoginPage() {
         </div>
       </div>
     </div>
-    </AuthRedirect>
   )
 }

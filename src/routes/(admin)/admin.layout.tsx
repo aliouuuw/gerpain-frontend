@@ -1,10 +1,10 @@
-import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
+import { Link, Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { ChevronDown, LogOut, Settings, User } from 'lucide-react'
 import { useAuthStore } from '../../stores/authStore'
-import { useOrganizationStore } from '@/stores/organizationStore'
+import { useOrganizationStore } from '../../stores/organizationStore'
 
-export const Route = createFileRoute('/(admin)/admin/home')({
+export const Route = createFileRoute('/(admin)/admin/layout')({
   beforeLoad: ({ location }) => {
     const authStore = useAuthStore.getState()
 

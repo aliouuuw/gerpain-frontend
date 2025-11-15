@@ -20,6 +20,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as adminAdminUsersRouteImport } from './routes/(admin)/admin.users'
 import { Route as adminAdminOrganizationsRouteImport } from './routes/(admin)/admin.organizations'
+import { Route as adminAdminLayoutRouteImport } from './routes/(admin)/admin.layout'
 import { Route as adminAdminInvitationsRouteImport } from './routes/(admin)/admin.invitations'
 import { Route as adminAdminHomeRouteImport } from './routes/(admin)/admin.home'
 import { Route as adminAdminDashboardRouteImport } from './routes/(admin)/admin.dashboard'
@@ -79,6 +80,11 @@ const adminAdminOrganizationsRoute = adminAdminOrganizationsRouteImport.update({
   path: '/admin/organizations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const adminAdminLayoutRoute = adminAdminLayoutRouteImport.update({
+  id: '/(admin)/admin/layout',
+  path: '/admin/layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const adminAdminInvitationsRoute = adminAdminInvitationsRouteImport.update({
   id: '/(admin)/admin/invitations',
   path: '/admin/invitations',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/admin/dashboard': typeof adminAdminDashboardRoute
   '/admin/home': typeof adminAdminHomeRoute
   '/admin/invitations': typeof adminAdminInvitationsRoute
+  '/admin/layout': typeof adminAdminLayoutRoute
   '/admin/organizations': typeof adminAdminOrganizationsRoute
   '/admin/users': typeof adminAdminUsersRoute
 }
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/admin/dashboard': typeof adminAdminDashboardRoute
   '/admin/home': typeof adminAdminHomeRoute
   '/admin/invitations': typeof adminAdminInvitationsRoute
+  '/admin/layout': typeof adminAdminLayoutRoute
   '/admin/organizations': typeof adminAdminOrganizationsRoute
   '/admin/users': typeof adminAdminUsersRoute
 }
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/(admin)/admin/dashboard': typeof adminAdminDashboardRoute
   '/(admin)/admin/home': typeof adminAdminHomeRoute
   '/(admin)/admin/invitations': typeof adminAdminInvitationsRoute
+  '/(admin)/admin/layout': typeof adminAdminLayoutRoute
   '/(admin)/admin/organizations': typeof adminAdminOrganizationsRoute
   '/(admin)/admin/users': typeof adminAdminUsersRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/home'
     | '/admin/invitations'
+    | '/admin/layout'
     | '/admin/organizations'
     | '/admin/users'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/home'
     | '/admin/invitations'
+    | '/admin/layout'
     | '/admin/organizations'
     | '/admin/users'
   id:
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/(admin)/admin/dashboard'
     | '/(admin)/admin/home'
     | '/(admin)/admin/invitations'
+    | '/(admin)/admin/layout'
     | '/(admin)/admin/organizations'
     | '/(admin)/admin/users'
   fileRoutesById: FileRoutesById
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   adminAdminDashboardRoute: typeof adminAdminDashboardRoute
   adminAdminHomeRoute: typeof adminAdminHomeRoute
   adminAdminInvitationsRoute: typeof adminAdminInvitationsRoute
+  adminAdminLayoutRoute: typeof adminAdminLayoutRoute
   adminAdminOrganizationsRoute: typeof adminAdminOrganizationsRoute
   adminAdminUsersRoute: typeof adminAdminUsersRoute
 }
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof adminAdminOrganizationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(admin)/admin/layout': {
+      id: '/(admin)/admin/layout'
+      path: '/admin/layout'
+      fullPath: '/admin/layout'
+      preLoaderRoute: typeof adminAdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(admin)/admin/invitations': {
       id: '/(admin)/admin/invitations'
       path: '/admin/invitations'
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   adminAdminDashboardRoute: adminAdminDashboardRoute,
   adminAdminHomeRoute: adminAdminHomeRoute,
   adminAdminInvitationsRoute: adminAdminInvitationsRoute,
+  adminAdminLayoutRoute: adminAdminLayoutRoute,
   adminAdminOrganizationsRoute: adminAdminOrganizationsRoute,
   adminAdminUsersRoute: adminAdminUsersRoute,
 }

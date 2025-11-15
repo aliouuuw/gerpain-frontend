@@ -1,10 +1,9 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useAuthStore } from '../stores/authStore'
 import Header from '../components/Header'
-import AuthGuard from '../components/AuthGuard'
 
 export const Route = createFileRoute('/dashboard')({
-  beforeLoad: ({ location }) => {
+  beforeLoad: async ({ location }) => {
     const authStore = useAuthStore.getState()
 
     // Check if we have basic auth state
@@ -27,8 +26,7 @@ export const Route = createFileRoute('/dashboard')({
 function DashboardPage() {
 
   return (
-    <AuthGuard>
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <Header />
 
@@ -169,6 +167,5 @@ function DashboardPage() {
         </div>
       </main>
     </div>
-    </AuthGuard>
   )
 }

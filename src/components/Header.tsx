@@ -1,11 +1,20 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { useAuthStore } from '../stores/authStore'
 
 export default function Header() {
+  const navigate = useNavigate()
+  const location = useLocation()
   const { user, isAuthenticated, signout } = useAuthStore()
 
   const handleSignout = async () => {
     await signout()
+    navigate({
+      to: '/login',
+      search: {
+        redirect: location.pathname,
+      },
+      replace: true,
+    })
   }
 
   return (
